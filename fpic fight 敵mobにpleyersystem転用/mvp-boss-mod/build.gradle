@@ -51,8 +51,9 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-    // EpicFight is published on Modrinth's Maven. exclusiveContent keeps that repo scoped to the
-    // maven.modrinth group only, and forRepositories(fg.repository) lets ForgeGradle deobfuscate it.
+    // EpicFight + Invincible Lib are published on Modrinth's Maven. exclusiveContent keeps that repo
+    // scoped to the maven.modrinth group only, and forRepositories(fg.repository) lets ForgeGradle
+    // deobfuscate it.
     exclusiveContent {
         forRepository {
             maven {
@@ -63,14 +64,33 @@ repositories {
         forRepositories(fg.repository)
         filter { includeGroup 'maven.modrinth' }
     }
+    // Epic Fight - Indestructible (Layer 2) is CurseForge-only; pull it via CurseMaven, again scoped
+    // to its own group and deobfuscated through ForgeGradle.
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'CurseMaven'
+                url = 'https://cursemaven.com'
+            }
+        }
+        forRepositories(fg.repository)
+        filter { includeGroup 'curse.maven' }
+    }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    // Pure datapack approach: this mod has no compile-time EpicFight imports, so a runtime
-    // dependency is enough. Switch to implementation only if you later call EpicFight APIs from Java.
-    runtimeOnly fg.deobf("maven.modrinth:epic-fight:${epicfight_version}")
+    // Layer 3 (RoninSkillAI) calls the EpicFight API (yesman.epicfight.*), so EpicFight must be a
+    // COMPILE dependency now — not merely runtime. Building therefore requires a 1.20.1 + EpicFight
+    // dev environment that can resolve these artifacts.
+    implementation fg.deobf("maven.modrinth:epic-fight:${epicfight_version}")
+
+    // Layer 2 — Epic Fight - Indestructible provides the advanced_mobpatch guard/parry/stamina
+    // mechanics. We only reference it from the datapack (no Java imports), so runtimeOnly is enough.
+    // Invincible Lib is Indestructible's required library. VERIFY both coordinates for your install.
+    runtimeOnly fg.deobf("maven.modrinth:epic-fight-invincible-lib:${invinciblelib_version}")
+    runtimeOnly fg.deobf("curse.maven:epic-fight-indestructible-${indestructible_curse_projectid}:${indestructible_curse_fileid}")
 }
 
 // Expand build properties into mods.toml / pack.mcmeta if placeholders are used. The bundled

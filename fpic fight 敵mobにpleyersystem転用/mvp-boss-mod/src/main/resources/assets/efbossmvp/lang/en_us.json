@@ -1,4 +1,6 @@
 {
   "entity.efbossmvp.dread_knight": "Dread Knight",
-  "item.efbossmvp.dread_knight_spawn_egg": "Dread Knight Spawn Egg"
+  "item.efbossmvp.dread_knight_spawn_egg": "Dread Knight Spawn Egg",
+  "entity.efbossmvp.ronin": "Ronin",
+  "item.efbossmvp.ronin_spawn_egg": "Ronin Spawn Egg"
 }

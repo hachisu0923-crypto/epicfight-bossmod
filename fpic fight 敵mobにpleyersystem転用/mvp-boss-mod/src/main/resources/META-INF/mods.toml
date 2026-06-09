@@ -9,8 +9,10 @@ version="1.0.0"
 displayName="EpicFight MVP Boss"
 authors="you"
 description='''
-MVP: a new boss (efbossmvp:dread_knight) that uses EpicFight player-skill animations
-(sweeping_edge / greatsword_slam) via a datapack. Requires EpicFight base mod.
+Adds EpicFight bosses. efbossmvp:dread_knight uses EpicFight player-skill animations via a
+datapack. efbossmvp:ronin is an uchigatana duelist with real Guard/Parry/stamina (Epic Fight -
+Indestructible) plus a Java reactive layer (Step dodge / Phantom Ascent / Emergency Escape).
+Requires EpicFight base mod and Epic Fight - Indestructible (+ Invincible Lib).
 '''
 
 # --- Forge（定型） ---
@@ -36,5 +38,15 @@ MVP: a new boss (efbossmvp:dread_knight) that uses EpicFight player-skill animat
     modId="epicfight"
     mandatory=true
     versionRange="[20.14,)"
+    ordering="AFTER"
+    side="BOTH"
+
+# --- Epic Fight - Indestructible（層2：mob の Guard/Parry/スタミナ） ---
+# ronin の advanced_mobpatch を読ませるためハード依存。導入版に合わせて versionRange を調整。
+# modId は導入する Indestructible の実際の modId に一致させること（既定は "indestructible"）。
+[[dependencies.efbossmvp]]
+    modId="indestructible"
+    mandatory=true
+    versionRange="[20.9,)"
     ordering="AFTER"
     side="BOTH"
