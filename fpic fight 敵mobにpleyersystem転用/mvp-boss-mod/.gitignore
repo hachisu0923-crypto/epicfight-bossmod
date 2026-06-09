@@ -1,0 +1,21 @@
+# Gradle
+.gradle/
+build/
+run/
+run-data/
+src/generated/resources/
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# OS / editor
+*.bak
+.DS_Store
