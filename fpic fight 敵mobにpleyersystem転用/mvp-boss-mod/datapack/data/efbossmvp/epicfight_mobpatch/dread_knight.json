@@ -1,0 +1,95 @@
+{
+  "model": "epicfight:entity/biped",
+  "armature": "epicfight:entity/biped",
+  "renderer": "minecraft:zombie",
+  "isHumanoid": true,
+  "faction": "undead",
+  "attributes": {
+    "impact": 0.8,
+    "armor_negation": 10.0,
+    "max_strikes": 1,
+    "stun_armor": 2.0,
+    "chasing_speed": 1.1,
+    "scale": 1.1
+  },
+  "default_livingmotions": {
+    "idle": "epicfight:biped/living/idle",
+    "walk": "epicfight:biped/living/walk",
+    "chase": "epicfight:biped/living/walk",
+    "death": "epicfight:biped/living/death"
+  },
+  "stun_animations": {
+    "short": "epicfight:biped/combat/hit_short",
+    "long": "epicfight:biped/combat/hit_long",
+    "knockdown": "epicfight:biped/combat/knockdown"
+  },
+  "humanoid_weapon_motions": [
+    {
+      "weapon_categories": ["sword", "longsword", "greatsword"],
+      "style": "two_hand",
+      "livingmotions": {
+        "idle": "epicfight:biped/living/idle",
+        "walk": "epicfight:biped/living/walk",
+        "chase": "epicfight:biped/living/walk"
+      }
+    }
+  ],
+  "combat_behavior": [
+    {
+      "weapon_categories": ["sword", "longsword", "greatsword"],
+      "style": "two_hand",
+      "behavior_series": [
+        {
+          "weight": 80.0,
+          "canBeInterrupted": true,
+          "looping": false,
+          "cooldown": 20,
+          "behaviors": [
+            {
+              "animation": "epicfight:biped/combat/mob_onehand1",
+              "conditions": [
+                { "predicate": "within_distance", "min": 0.0, "max": 2.5 }
+              ]
+            },
+            {
+              "animation": "epicfight:biped/combat/mob_onehand2",
+              "conditions": [
+                { "predicate": "within_distance", "min": 0.0, "max": 2.5 }
+              ]
+            }
+          ]
+        },
+        {
+          "weight": 60.0,
+          "canBeInterrupted": false,
+          "looping": false,
+          "cooldown": 120,
+          "behaviors": [
+            {
+              "animation": "epicfight:biped/skill/sweeping_edge",
+              "conditions": [
+                { "predicate": "health", "health": 0.5, "comparator": "less_ratio" },
+                { "predicate": "within_distance", "min": 0.0, "max": 3.0 }
+              ]
+            }
+          ]
+        },
+        {
+          "weight": 70.0,
+          "canBeInterrupted": false,
+          "looping": false,
+          "cooldown": 160,
+          "behaviors": [
+            {
+              "animation": "epicfight:biped/skill/greatsword_slam",
+              "conditions": [
+                { "predicate": "health", "health": 0.25, "comparator": "less_ratio" },
+                { "predicate": "within_distance", "min": 0.0, "max": 3.5 }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

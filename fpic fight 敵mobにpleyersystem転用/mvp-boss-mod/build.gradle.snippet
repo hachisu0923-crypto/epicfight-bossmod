@@ -1,0 +1,40 @@
+// === efbossmvp: 既存 build.gradle へ追記する分 ===
+// EpicFight 本体を dev runtime 依存として追加する（本MVPは純データパック方式のため
+// EpicFight API へコンパイル依存しない → runtimeOnly で十分。将来 Java で EpicFight API を
+// 直接叩く場合のみ implementation に変更すること）。
+
+repositories {
+    // EpicFight 公式推奨: Modrinth Maven
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        forRepositories(fg.repository)            // ForgeGradle の deobf リポジトリと束ねる
+        filter { includeGroup "maven.modrinth" }
+    }
+
+    // 代替: CurseForge（cursemaven）。上の Modrinth を使うなら不要。
+    // maven {
+    //     name = "CurseMaven"
+    //     url = "https://cursemaven.com"
+    //     content { includeGroup "curse.maven" }
+    // }
+}
+
+dependencies {
+    // 純データパック方式: 実行時に在ればよい → runtimeOnly
+    runtimeOnly fg.deobf("maven.modrinth:epic-fight:${epicfight_version}")
+
+    // 代替(cursemaven): runtimeOnly fg.deobf("curse.maven:epic-fight-mod-405076:${epicfight_curse_fileid}")
+
+    // 任意アドオン（スタミナ/ガード/パリィを Mob に付与したい場合）:
+    // runtimeOnly fg.deobf("curse.maven:epic-fight-indestructible-<projId>:<fileId>")
+}
+
+// 備考:
+// - Forge 1.20.1 では fg.deobf(...) でラップすること（生の maven.modrinth 座標を直接 implementation すると dev で動かない）。
+// - EpicFight API を Java から直接使う設計に切り替える場合は runtimeOnly → implementation に変更。
+//   その際 EpicFight の package（yesman.epicfight.*）が解決可能になる。

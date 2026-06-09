@@ -1,0 +1,40 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="All Rights Reserved"
+issueTrackerURL="https://example.com"
+
+[[mods]]
+modId="efbossmvp"
+version="1.0.0"
+displayName="EpicFight MVP Boss"
+authors="you"
+description='''
+MVP: a new boss (efbossmvp:dread_knight) that uses EpicFight player-skill animations
+(sweeping_edge / greatsword_slam) via a datapack. Requires EpicFight base mod.
+'''
+
+# --- Forge（定型） ---
+[[dependencies.efbossmvp]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="BOTH"
+
+# --- Minecraft（定型） ---
+[[dependencies.efbossmvp]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,1.21)"
+    ordering="NONE"
+    side="BOTH"
+
+# --- EpicFight 本体（前提依存・ハード依存） ---
+# 導入する EpicFight jar 版に合わせて versionRange を調整すること。
+# ordering=AFTER で EpicFight のレジストリ後に本modをロードする。
+[[dependencies.efbossmvp]]
+    modId="epicfight"
+    mandatory=true
+    versionRange="[20.14,)"
+    ordering="AFTER"
+    side="BOTH"
