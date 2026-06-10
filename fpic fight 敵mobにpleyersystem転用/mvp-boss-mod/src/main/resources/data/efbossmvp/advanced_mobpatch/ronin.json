@@ -68,33 +68,24 @@
           "weight": 100.0,
           "canBeInterrupted": true,
           "looping": false,
-          "cooldown": 16,
+          "cooldown": 20,
           "behaviors": [
             {
-              "animation": "epicfight:biped/combat/mob_uchigatana1",
+              "animation": "epicfight:biped/combat/uchigatana_auto1",
               "conditions": [
-                { "predicate": "within_distance", "min": 0.0, "max": 2.4 }
+                { "predicate": "within_distance", "min": 0.0, "max": 2.5 }
               ]
             },
             {
-              "animation": "epicfight:biped/combat/mob_uchigatana2",
+              "animation": "epicfight:biped/combat/uchigatana_auto2",
               "conditions": [
-                { "predicate": "within_distance", "min": 0.0, "max": 2.4 }
+                { "predicate": "within_distance", "min": 0.0, "max": 2.5 }
               ]
-            }
-          ]
-        },
-        {
-          "weight": 55.0,
-          "canBeInterrupted": false,
-          "looping": false,
-          "cooldown": 90,
-          "behaviors": [
+            },
             {
-              "animation": "epicfight:biped/combat/mob_uchigatana3",
+              "animation": "epicfight:biped/combat/uchigatana_auto3",
               "conditions": [
-                { "predicate": "health", "health": 0.7, "comparator": "less_ratio" },
-                { "predicate": "within_distance", "min": 0.0, "max": 2.6 }
+                { "predicate": "within_distance", "min": 0.0, "max": 2.5 }
               ]
             }
           ]
@@ -172,7 +163,7 @@
               "guard": 70,
               "parry": true,
               "parry_times": 3,
-              "counter": "epicfight:biped/combat/mob_uchigatana3",
+              "counter": "epicfight:biped/combat/uchigatana_dash",
               "counter_cost": 4.0,
               "counter_chance": 0.45,
               "counter_speed": 1.2,
