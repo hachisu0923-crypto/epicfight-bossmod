@@ -187,6 +187,15 @@ datapack/                    手動でワールド datapacks/ に置きたい人
   同梱 example datapack に合わせて修正する。`stamina_regan_*` の綴りは "regan"（"regen" ではない）。
 - **Indestructible / Invincible Lib の座標は要確認**：`gradle.properties` の `indestructible_curse_*`
   （projectId 915201 / fileId 7125700 = 20.13.0）と `invinciblelib_version` を、実際に導入する jar に合わせる。
+- **【頻出クラッシュ】Indestructible と EpicFight のバージョン不一致**：
+  `NoClassDefFoundError: yesman/epicfight/api/forgeevent/AnimationRegistryEvent` が出たら、
+  **Indestructible が古すぎて EpicFight 本体に非対応**。EpicFight は **20.10.2 でこのクラスを削除**したため、
+  旧公式 Indestructible（〜20.9.x）は EpicFight 20.10.2 以降と組み合わせると必ず落ちる。
+  対処（EpicFight は 20.14.x のまま＝本 mod は 20.14 API でコンパイル済みなので下げない）:
+  - **推奨**：Indestructible を **「Epic Fight Indestructible - Unofficially Enhanced」フォーク**（EpicFight 20.14.x 対応）に置換。
+    依存の **Invincible Lib**(20.14.x.x) を、そのフォークのファイルが要求する版に合わせる。
+  - 代替：旧公式の最新 **indestructible-20.13.0**（≥20.12＝削除後ビルド）に上げる（Invincible Lib は不要・残しても無害）。
+  - どちらに替えても `ronin.json` の `advanced_mobpatch` スキーマがその Indestructible の期待形と一致するかをログで再確認。
 - **層3 は EpicFight API バージョン依存**：`EpicFightCapabilities.getEntityPatch` /
   `LivingEntityPatch#playAnimationSynchronized(AssetAccessor, float)` /
   `getEntityState().getLevel()`（0 free/1 予備/2 接触/3 回復）/ `AnimationManager.byKey` は 1.20.1 実ソース確認済み。
