@@ -193,6 +193,12 @@ datapack/                    手動でワールド datapacks/ に置きたい人
   シグネチャが変わっていたら `RoninSkillAI` を合わせる。コンパイルできなければ `efcompat/` を外して層1+2 運用も可。
 - mob には dodge を直接与える機構が Indestructible に**無い**ため、Step/Phantom Ascent/Emergency Escape は
   層3 で実装している（データパックだけでは再現不可）。
+- **i-frame / Emergency Escape は `LivingHurtEvent` を HIGH 優先度で cancel** する。`/kill`・奈落など
+  無敵貫通（`BYPASSES_INVULNERABILITY`）・爆発・魔法は素通しする（EpicFight 本体の回避判定と同基準）が、
+  cancel された被弾は NORMAL 優先度の他 mod（ダメージ集計等）からは見えない（仕様）。
+- **第三者配布の advanced_mobpatch JSON は「コード」として扱う**こと：Indestructible の
+  `stun_command_list` フィールドは任意コマンドを実行できる。本 mod の `ronin.json` は不使用だが、
+  信頼できない配布元の datapack をワールドに入れない。
 
 ## バージョン注意
 

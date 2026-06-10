@@ -48,8 +48,39 @@ public class RoninEntity extends Monster {
     private static final ResourceLocation EPICFIGHT_UCHIGATANA =
             new ResourceLocation("epicfight", "uchigatana");
 
+    // Transient combat timers for RoninSkillAI (absolute game time, ticks). Kept on the entity so
+    // they are garbage-collected with it — a static UUID-keyed map would leak on long-running
+    // servers. Deliberately not saved to NBT: cooldowns resetting on reload is harmless.
+    private long dodgeReadyAt;
+    private long leapReadyAt;
+    private long iframeUntil;
+
     public RoninEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
+    }
+
+    public long getDodgeReadyAt() {
+        return this.dodgeReadyAt;
+    }
+
+    public void setDodgeReadyAt(long tick) {
+        this.dodgeReadyAt = tick;
+    }
+
+    public long getLeapReadyAt() {
+        return this.leapReadyAt;
+    }
+
+    public void setLeapReadyAt(long tick) {
+        this.leapReadyAt = tick;
+    }
+
+    public long getIframeUntil() {
+        return this.iframeUntil;
+    }
+
+    public void setIframeUntil(long tick) {
+        this.iframeUntil = tick;
     }
 
     @Override
