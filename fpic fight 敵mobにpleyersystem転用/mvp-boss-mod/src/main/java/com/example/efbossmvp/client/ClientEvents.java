@@ -3,6 +3,7 @@ package com.example.efbossmvp.client;
 import com.example.efbossmvp.DreadKnightEntity;
 import com.example.efbossmvp.EfBossMvp;
 import com.example.efbossmvp.ModEntities;
+import com.example.efbossmvp.RoninEntity;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
@@ -33,6 +34,15 @@ public class ClientEvents {
                         ctx, new HumanoidModel<>(ctx.bakeLayer(ModelLayers.ZOMBIE)), 0.5F) {
                     @Override
                     public ResourceLocation getTextureLocation(DreadKnightEntity entity) {
+                        return ZOMBIE_TEXTURE;
+                    }
+                });
+
+        event.registerEntityRenderer(ModEntities.RONIN.get(),
+                ctx -> new HumanoidMobRenderer<RoninEntity, HumanoidModel<RoninEntity>>(
+                        ctx, new HumanoidModel<>(ctx.bakeLayer(ModelLayers.ZOMBIE)), 0.5F) {
+                    @Override
+                    public ResourceLocation getTextureLocation(RoninEntity entity) {
                         return ZOMBIE_TEXTURE;
                     }
                 });

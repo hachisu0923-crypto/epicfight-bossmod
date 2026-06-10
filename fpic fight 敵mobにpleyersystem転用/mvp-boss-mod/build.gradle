@@ -1,0 +1,122 @@
+plugins {
+    id 'eclipse'
+    id 'idea'
+    id 'net.minecraftforge.gradle' version '[6.0.24,6.2)'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = mod_id
+}
+
+// Forge 1.20.1 targets Java 17. Building with a newer JDK (e.g. 21) is not supported by
+// ForgeGradle's decompile/recompile toolchain — install a JDK 17 to run ./gradlew build.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    mappings channel: mapping_channel, version: mapping_version
+
+    runs {
+        configureEach {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                "${mod_id}" {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        client {
+            property 'forge.enabledGameTestNamespaces', mod_id
+        }
+
+        server {
+            property 'forge.enabledGameTestNamespaces', mod_id
+            args '--nogui'
+        }
+
+        data {
+            workingDirectory project.file('run-data')
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+        }
+    }
+}
+
+// Bundle datapack-style generated/static resources alongside the mod's own resources.
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {
+    // EpicFight + Invincible Lib are published on Modrinth's Maven. exclusiveContent keeps that repo
+    // scoped to the maven.modrinth group only, and forRepositories(fg.repository) lets ForgeGradle
+    // deobfuscate it.
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Modrinth'
+                url = 'https://api.modrinth.com/maven'
+            }
+        }
+        forRepositories(fg.repository)
+        filter { includeGroup 'maven.modrinth' }
+    }
+    // Epic Fight - Indestructible (Layer 2) is CurseForge-only; pull it via CurseMaven, again scoped
+    // to its own group and deobfuscated through ForgeGradle.
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'CurseMaven'
+                url = 'https://cursemaven.com'
+            }
+        }
+        forRepositories(fg.repository)
+        filter { includeGroup 'curse.maven' }
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    // Layer 3 (RoninSkillAI) calls the EpicFight API (yesman.epicfight.*), so EpicFight must be a
+    // COMPILE dependency now — not merely runtime. Building therefore requires a 1.20.1 + EpicFight
+    // dev environment that can resolve these artifacts.
+    implementation fg.deobf("maven.modrinth:epic-fight:${epicfight_version}")
+
+    // Layer 2 — Epic Fight - Indestructible provides the advanced_mobpatch guard/parry/stamina
+    // mechanics. We only reference it from the datapack (no Java imports), so runtimeOnly is enough.
+    // Invincible Lib is Indestructible's required library. VERIFY both coordinates for your install.
+    runtimeOnly fg.deobf("maven.modrinth:epic-fight-invincible-lib:${invinciblelib_version}")
+    runtimeOnly fg.deobf("curse.maven:epic-fight-indestructible-${indestructible_curse_projectid}:${indestructible_curse_fileid}")
+}
+
+// Expand build properties into mods.toml / pack.mcmeta if placeholders are used. The bundled
+// mods.toml is hard-coded today, so this is a harmless pass-through that future-proofs the build.
+tasks.named('processResources', ProcessResources).configure {
+    var replaceProperties = [
+            minecraft_version  : minecraft_version,
+            forge_version      : forge_version,
+            mod_id             : mod_id,
+            mod_version        : mod_version,
+            epicfight_version  : epicfight_version
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
+}
+
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes([
+                'Specification-Title'     : mod_id,
+                'Specification-Version'   : '1',
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.version
+        ])
+    }
+}

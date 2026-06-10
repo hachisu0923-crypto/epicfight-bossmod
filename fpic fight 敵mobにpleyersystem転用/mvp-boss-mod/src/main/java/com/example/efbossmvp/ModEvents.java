@@ -20,22 +20,29 @@ public class ModEvents {
     public static void onAttributeCreate(EntityAttributeCreationEvent event) {
         // Required: a LivingEntity without registered attributes crashes on spawn.
         event.put(ModEntities.DREAD_KNIGHT.get(), DreadKnightEntity.createAttributes().build());
+        event.put(ModEntities.RONIN.get(), RoninEntity.createAttributes().build());
     }
 
     @SubscribeEvent
     public static void onCommonSetup(FMLCommonSetupEvent event) {
         // SpawnPlacements.register must run on the main thread.
-        event.enqueueWork(() ->
-                SpawnPlacements.register(ModEntities.DREAD_KNIGHT.get(),
-                        SpawnPlacements.Type.ON_GROUND,                 // 1.20.1: SpawnPlacements.Type
-                        Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                        Monster::checkMonsterSpawnRules));
+        event.enqueueWork(() -> {
+            SpawnPlacements.register(ModEntities.DREAD_KNIGHT.get(),
+                    SpawnPlacements.Type.ON_GROUND,                 // 1.20.1: SpawnPlacements.Type
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    Monster::checkMonsterSpawnRules);
+            SpawnPlacements.register(ModEntities.RONIN.get(),
+                    SpawnPlacements.Type.ON_GROUND,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    Monster::checkMonsterSpawnRules);
+        });
     }
 
     @SubscribeEvent
     public static void onBuildTabs(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
             event.accept(ModItems.DREAD_KNIGHT_SPAWN_EGG.get());
+            event.accept(ModItems.RONIN_SPAWN_EGG.get());
         }
     }
 }

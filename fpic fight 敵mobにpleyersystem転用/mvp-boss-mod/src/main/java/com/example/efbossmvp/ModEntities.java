@@ -25,4 +25,15 @@ public class ModEntities {
                             .clientTrackingRange(80)
                             .fireImmune()
                             .build("dread_knight"));
+
+    /**
+     * The uchigatana duelist boss. The registry path "ronin" MUST match the datapack file name
+     * {@code data/efbossmvp/advanced_mobpatch/ronin.json} (Epic Fight - Indestructible).
+     */
+    public static final RegistryObject<EntityType<RoninEntity>> RONIN =
+            ENTITIES.register("ronin", () ->
+                    EntityType.Builder.of(RoninEntity::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.95F)        // humanoid-ish size (biped)
+                            .clientTrackingRange(80)
+                            .build("ronin"));
 }
